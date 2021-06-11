@@ -13,6 +13,20 @@ df = df.replace(np.nan, "", regex=True)
 states_list = []
 for index, row in df.iterrows():
     states_list.append(row["state/ut"])
+names_list = []
+for index, row in df.iterrows():
+    names_list.append(row["name"])
+
+
+def return_name_details(parameter_name=""):
+    for index, row in df.iterrows():
+        if row["name"] == parameter_name:
+            row.pop('State Flag')
+            row.pop('Term Flag')
+            row.pop('Gender Flag')
+            row.pop('Comments')
+            return row
+
 
 states_list = list(np.unique(np.array(states_list)))
 

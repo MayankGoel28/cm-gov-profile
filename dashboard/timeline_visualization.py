@@ -36,7 +36,7 @@ def date_get(s):
     return s[6] + s[7] + s[8] + s[9] + "-" + s[3] + s[4] + "-" + s[0] + s[1]
 
 
-for state in states:
+def timeline_state(state='West Bengal'):
     for index, row in df.iterrows():
         if row["state/ut"] == state:
             # print(type(row["appointment_begin"]))
@@ -53,27 +53,18 @@ for state in states:
                     "State": row["state/ut"],
                 }
             )
+    data_df = pd.DataFrame(data)
+    fig = px.timeline(data_df, x_start="Start",
+                      x_end="Finish", y="Name")
+    return fig
 
-# print(data)
-data_df = pd.DataFrame(data)
-
-# print(data_df)
 
 # fig = px.timeline(data_df, x_start='Start', x_end='Finish', y='State', color='State')
 # fig.show()
 
 
-fig = px.timeline(data_df, x_start="Start",
-                  x_end="Finish", y="State", color="Name")
-
-
 def timeline_name():
-    return fig
-
-
-fig = px.timeline(data_df, x_start="Start",
-                  x_end="Finish", y="State", color="State")
-
-
-def timeline_state():
-    return fig
+    pass
+#     fig = px.timeline(data_df, x_start="Start",
+#                       x_end="Finish", y="State", color="State")
+#     return fig

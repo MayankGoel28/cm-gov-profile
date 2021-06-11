@@ -64,4 +64,8 @@ fig = px.choropleth(ratio, locations="id", geojson="states", color="Ratio")
 
 
 def gender_data():
+    fig = px.bar(ratio, x='State', y='Ratio', labels={
+        "Ratio": "Percentage of Females"
+    })
+    # print(ratio)
     return fig

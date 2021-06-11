@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-from dashboard.state_based_terms import state_terms, states_list
+from dashboard.state_based_terms import state_terms, states_list, names_list, return_name_details
 from dashboard.total_terms import governors_days, total_duration_gov
 from dashboard.gender_data import gender_data
 from dashboard.timeline_visualization import timeline_name, timeline_state
@@ -20,10 +20,12 @@ st.plotly_chart(governors_days())
 st.plotly_chart(total_duration_gov())
 "Gender Data"
 st.plotly_chart(gender_data())
-"Timeline Visualized by Name"
-st.plotly_chart(timeline_name())
+# "Timeline Visualized by Name"
+# st.plotly_chart(timeline_name())
+state_option = st.selectbox("States", states_list)
 "Timeline Visualized by State"
-st.plotly_chart(timeline_state())
-option = st.selectbox("States", states_list)
+st.plotly_chart(timeline_state(state_option))
 "State Based Terms"
-st.plotly_chart(state_terms(option))
+st.plotly_chart(state_terms(state_option))
+name_option = st.selectbox("Names", names_list)
+st.write(return_name_details(name_option))
