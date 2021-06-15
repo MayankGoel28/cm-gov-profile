@@ -12,6 +12,8 @@ pd.options.plotting.backend = "plotly"
 
 source = "./Governors Data/governors_draft_4.csv"
 new_source = "./Governors Data/governors_draft_4.csv"
+# source = "./Chief Minister's Data/CM_Final.csv"
+# new_source = "./Chief Minister's Data/CM_Final.csv"
 
 
 df = pd.read_csv(source)

@@ -1,10 +1,8 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-from dashboard.state_based_terms import state_terms, states_list, names_list, return_name_details
 from dashboard.total_terms import governors_days, total_duration_gov
-from dashboard.gender_data import gender_data
-from dashboard.timeline_visualization import timeline_name, timeline_state
+from dashboard.timeline_visualization import state_terms, timeline_name, timeline_state, gender_data, names_list, states_list
 
 # from fuzzywuzzy import fuzz, process
 
@@ -20,12 +18,24 @@ st.plotly_chart(governors_days())
 st.plotly_chart(total_duration_gov())
 "Gender Data"
 st.plotly_chart(gender_data())
-# "Timeline Visualized by Name"
-# st.plotly_chart(timeline_name())
-state_option = st.selectbox("States", states_list)
+
+state_options = st.multiselect("States", states_list, None)
+print(state_options)
 "Timeline Visualized by State"
-st.plotly_chart(timeline_state(state_option))
-"State Based Terms"
-st.plotly_chart(state_terms(state_option))
-name_option = st.selectbox("Names", names_list)
-st.write(return_name_details(name_option))
+try:
+    st.plotly_chart(timeline_state(state_options))
+except:
+    "*Select one or more states to begin.*"
+if len(state_options) == 1:
+    "State Based Terms"
+    st.plotly_chart(state_terms(state_options[0]))
+else:
+    "*Select only one State to get term visualization*"
+
+name_options = st.multiselect("Names", names_list, None)
+"Timeline Visualized by Governors"
+try:
+    st.plotly_chart(timeline_name(name_options))
+except:
+    "*Select one or more Governors to begin.*"
+# st.write(return_name_details(name_option))
