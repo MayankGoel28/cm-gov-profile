@@ -101,7 +101,7 @@ def timeline_name(names=[]):
                 )
     data_df = pd.DataFrame(data)
     fig = px.timeline(data_df, x_start="Start",
-                      x_end="Finish", y="State")
+                      x_end="Finish", y="State", color="Name")
     return fig
 
 
