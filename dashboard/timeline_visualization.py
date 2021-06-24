@@ -84,6 +84,8 @@ def timeline_state(states=[]):
     data_df = pd.DataFrame(data)
     fig = px.timeline(data_df, x_start="Start",
                       x_end="Finish", y="Name", color="State")
+    for index, row in data_df.iterrows():
+        row["Name"] = row["Name"].split("(")[0]
     return (fig, data_df, repeats)
 
 
