@@ -87,19 +87,17 @@ for i in range(len(names)):
 # print(names)
 
 
-fig = go.Figure(
-    data=go.Scatter(
-        x=unique_ids,
-        y=total_duration,
-        text=names,
-        hovertemplate="<b>ID</b>: %{x}<br>"
-        + "<b>Total Duration</b>: %{y} days<br>"
-        + "<b>Name</b>: %{text}<extra></extra>",
-    )
-)
-
-
 def total_duration_gov():
+    fig = go.Figure(
+        data=go.Scatter(
+            x=unique_ids,
+            y=total_duration,
+            text=names,
+            hovertemplate="<b>ID</b>: %{x}<br>"
+            + "<b>Total Duration</b>: %{y} days<br>"
+            + "<b>Name</b>: %{text}<extra></extra>",
+        )
+    )
     return fig
 
 

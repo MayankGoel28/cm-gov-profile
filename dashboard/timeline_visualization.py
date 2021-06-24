@@ -50,7 +50,7 @@ states_list = list(np.unique(np.array(states_list)))
 repeat_governors = {}
 
 
-def timeline_state(states=[]):
+def timeline_state(start_year, end_year, states=[]):
     if not states:
         return None
     data = []
@@ -63,18 +63,19 @@ def timeline_state(states=[]):
                     end_date = date_get(row["appointment_end"])
                 else:
                     end_date = "2021-01-13"
-                if row["name"] not in repeat_governors:
-                    repeat_governors[row["name"]] = [row["state/ut"]]
-                else:
-                    repeat_governors[row["name"]].append(row["state/ut"])
-                data.append(
-                    {
-                        "Name": f'{row["name"]} ({row["state/ut"]})',
-                        "Start": start_date,
-                        "Finish": end_date,
-                        "State": row["state/ut"],
-                    }
-                )
+                if int(end_date[:4]) >= start_year and int(start_date[:4]) <= end_year:
+                    if row["name"] not in repeat_governors:
+                        repeat_governors[row["name"]] = [row["state/ut"]]
+                    else:
+                        repeat_governors[row["name"]].append(row["state/ut"])
+                    data.append(
+                        {
+                            "Name": f'{row["name"]} ({row["state/ut"]})',
+                            "Start": start_date,
+                            "Finish": end_date,
+                            "State": row["state/ut"],
+                        }
+                    )
     repeats = []
     for name in repeat_governors:
         cur_list = list(set(repeat_governors[name]))
@@ -93,7 +94,7 @@ def timeline_state(states=[]):
 # fig.show()
 
 
-def timeline_name(names=[]):
+def timeline_name(start_year, end_year, names=[]):
     if not names:
         return None
     data = []
@@ -106,14 +107,15 @@ def timeline_name(names=[]):
                     end_date = date_get(row["appointment_end"])
                 else:
                     end_date = "2021-01-13"
-                data.append(
-                    {
-                        "Name": row["name"],
-                        "Start": start_date,
-                        "Finish": end_date,
-                        "State": row["state/ut"],
-                    }
-                )
+                if int(end_date[:4]) >= start_year and int(start_date[:4]) <= end_year:
+                    data.append(
+                        {
+                            "Name": row["name"],
+                            "Start": start_date,
+                            "Finish": end_date,
+                            "State": row["state/ut"],
+                        }
+                    )
     data_df = pd.DataFrame(data)
     fig = px.timeline(data_df, x_start="Start",
                       x_end="Finish", y="State", color="Name")
