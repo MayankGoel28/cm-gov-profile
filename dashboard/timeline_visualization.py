@@ -44,7 +44,10 @@ for index, row in df.iterrows():
 names_list = []
 for index, row in df.iterrows():
     names_list.append(row["name"])
+names_list = list(set(names_list))
 states_list = list(np.unique(np.array(states_list)))
+
+repeat_governors = {}
 
 
 def timeline_state(states=[]):
@@ -60,18 +63,28 @@ def timeline_state(states=[]):
                     end_date = date_get(row["appointment_end"])
                 else:
                     end_date = "2021-01-13"
+                if row["name"] not in repeat_governors:
+                    repeat_governors[row["name"]] = [row["state/ut"]]
+                else:
+                    repeat_governors[row["name"]].append(row["state/ut"])
                 data.append(
                     {
-                        "Name": row["name"],
+                        "Name": f'{row["name"]} ({row["state/ut"]})',
                         "Start": start_date,
                         "Finish": end_date,
                         "State": row["state/ut"],
                     }
                 )
+    repeats = []
+    for name in repeat_governors:
+        cur_list = list(set(repeat_governors[name]))
+        if len(cur_list) > 1:
+            repeats.append({"name": name, "States": ', '.join(cur_list)})
+    repeats = pd.DataFrame(repeats)
     data_df = pd.DataFrame(data)
     fig = px.timeline(data_df, x_start="Start",
                       x_end="Finish", y="Name", color="State")
-    return fig
+    return (fig, data_df, repeats)
 
 
 # fig = px.timeline(data_df, x_start='Start', x_end='Finish', y='State', color='State')
@@ -102,7 +115,7 @@ def timeline_name(names=[]):
     data_df = pd.DataFrame(data)
     fig = px.timeline(data_df, x_start="Start",
                       x_end="Finish", y="State", color="Name")
-    return fig
+    return (fig, data_df)
 
 
 def gender_data():
@@ -179,8 +192,8 @@ def state_terms(state=""):
                     total += row["term_duration"]
                     name = row["name"]
             names.append(name), total_dur.append(total)
-
-        fig = go.Figure(data=[go.Pie(labels=names, values=total_dur)])
+        fig = go.Figure(
+            data=[go.Pie(labels=names, values=total_dur)])
         return fig
-    except:
+    except Exception as e:
         return None

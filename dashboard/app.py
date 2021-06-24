@@ -20,11 +20,16 @@ st.plotly_chart(total_duration_gov())
 st.plotly_chart(gender_data())
 
 state_options = st.multiselect("States", states_list, None)
-print(state_options)
 "Timeline Visualized by State"
 try:
-    st.plotly_chart(timeline_state(state_options))
-except:
+    (fig, df, repeats) = timeline_state(state_options)
+    st.plotly_chart(fig)
+    st.dataframe(df)
+    if len(repeats):
+        st.write('Governors who have represented more than one state')
+        st.dataframe(repeats)
+except Exception as e:
+    print(e)
     "*Select one or more states to begin.*"
 if len(state_options) == 1:
     "State Based Terms"
@@ -35,7 +40,9 @@ else:
 name_options = st.multiselect("Names", names_list, None)
 "Timeline Visualized by Governors"
 try:
-    st.plotly_chart(timeline_name(name_options))
-except:
+    fig, df = timeline_name(name_options)
+    st.plotly_chart(fig)
+    if len(df) > 1:
+        st.dataframe(df)
+except Exception as e:
     "*Select one or more Governors to begin.*"
-# st.write(return_name_details(name_option))
