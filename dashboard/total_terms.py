@@ -7,6 +7,8 @@ from datetime import datetime
 from datetime import date
 import plotly.graph_objects as go
 import plotly.express as px
+import bisect
+from random import choices
 
 pd.options.plotting.backend = "plotly"
 
@@ -121,11 +123,17 @@ range_labels = [100, 400, 800, 1200, 1600, 2000, 4000, 8000, 16000]
 # bar_ranges = [i for i in range(range_labels)], bar_count = []
 
 bar_count_gov = [0 * i for i in range_labels]
+bar_count_names = ["" for i in range_labels]
+
+for index, row in df.iterrows():
+    bisected_position = bisect.bisect_left(range_labels, row['term_duration'])
+    bar_count_names[bisected_position] += f"\n{row['name']}"
 
 for val in range(len(range_labels)):
     for i in total_duration:
         if i <= range_labels[val]:
             bar_count_gov[val] += 1
+
 
 for i in range(len(bar_count_gov) - 1, 0, -1):
     if i > 0:
@@ -139,6 +147,16 @@ for i in range(len(bar_count_gov) - 1, 0, -1):
 
 # print(bar_range_labels, bar_count_gov)
 
+# With List of names on hover
+# fig = go.Figure(
+#     data=go.Bar(
+#         x=bar_range_labels,
+#         y=bar_count_gov,
+#         hovertemplate="<b>Range in days</b>: %{x}<br>"
+#         + "<b>Corresponding no. of Governors</b>: %{y} days<br><extra></extra>" + "<b> List of names:\n %{text}",
+#         text=bar_count_names,
+#     )
+# )
 
 fig = go.Figure(
     data=go.Bar(

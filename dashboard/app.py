@@ -5,17 +5,11 @@ import traceback
 from dashboard.total_terms import governors_days
 from dashboard.timeline_visualization import state_terms, timeline_name, timeline_state, gender_data, names_list, states_list
 
-# from fuzzywuzzy import fuzz, process
-
-# Str_A = "FuzzyWuzzy is a lifesaver!"
-# Str_B = "fuzzy wuzzy is a LIFE SAVER."
-# ratio = fuzz.ratio(Str_A.lower(), Str_B.lower())
-# st.title(ratio)
-
 st.sidebar.write("Parameters")
 start_year, end_year = st.sidebar.slider(
     "Select applicable years for timeline visualizations", 1930, 2021, value=(1930, 2021))
 show_df = st.sidebar.checkbox("Show dataframes")
+all_states = st.sidebar.checkbox("Show all States")
 
 st.title("CM Governor Dataset Visualizations")
 with st.beta_expander("Average Days"):
@@ -23,9 +17,11 @@ with st.beta_expander("Average Days"):
 with st.beta_expander("Gender Data"):
     st.plotly_chart(gender_data())
 
-
-state_options = st.sidebar.multiselect(
-    "States for timeline visualization", states_list, None)
+if all_states:
+    state_options = states_list
+else:
+    state_options = st.sidebar.multiselect(
+        "States for timeline visualization", states_list, None)
 with st.beta_expander("Timeline Visualized by State"):
     try:
         (fig, df, repeats) = timeline_state(
@@ -37,8 +33,6 @@ with st.beta_expander("Timeline Visualized by State"):
                 st.write('Governors who have represented more than one state')
                 st.dataframe(repeats)
     except Exception as e:
-        print(e)
-        traceback.print_tb(e.__traceback__)
         "*Select one or more states to begin.*"
     if len(state_options) == 1:
         "State Based Terms"
@@ -56,4 +50,3 @@ with st.beta_expander("Timeline Visualized by Governors"):
                 st.dataframe(df)
     except Exception as e:
         "*Select one or more Governors to begin.*"
-        traceback.print_tb(e.__traceback__)

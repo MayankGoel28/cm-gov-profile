@@ -41,10 +41,12 @@ def date_get(s):
 states_list = []
 for index, row in df.iterrows():
     states_list.append(row["state/ut"])
-names_list = []
+names_dict = {}
 for index, row in df.iterrows():
-    names_list.append(row["name"])
-names_list = list(set(names_list))
+    names_dict[row['ID']] = row["name"]
+names_list = []
+for id in names_dict:
+    names_list.append(f'{names_dict[id]} ({id})')
 states_list = list(np.unique(np.array(states_list)))
 
 repeat_governors = {}
@@ -98,8 +100,10 @@ def timeline_name(start_year, end_year, names=[]):
     if not names:
         return None
     data = []
-    for name in names:
+    for name_id in names:
         for index, row in df.iterrows():
+            name = name_id.split(' (')
+            name = name[0]
             if row["name"] == name:
                 # print(type(row["appointment_begin"]))
                 start_date = date_get(row["appointment_begin"])
