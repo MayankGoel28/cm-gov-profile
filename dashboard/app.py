@@ -17,6 +17,7 @@ with st.beta_expander("Average Days"):
 with st.beta_expander("Gender Data"):
     st.plotly_chart(gender_data())
 
+
 if all_states:
     state_options = states_list
 else:
@@ -39,6 +40,7 @@ with st.beta_expander("Timeline Visualized by State"):
         st.plotly_chart(state_terms(state_options[0]))
     else:
         "*Select only one State to get term visualization*"
+
 
 name_options = st.sidebar.multiselect("Names", names_list, None)
 with st.beta_expander("Timeline Visualized by Governors"):
